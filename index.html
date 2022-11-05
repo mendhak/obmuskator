@@ -25,7 +25,16 @@
             padding: 10px;
             margin-right: 40px;
             height: 600px;
+        }
 
+        @media screen and (max-width: 800px) {
+            .column {
+                width: 100%;
+            }
+            img {
+                max-width: 100%;
+            }
+            
         }
 
         .row:after {
@@ -44,7 +53,7 @@
 <body>
 
     <h2>Obmuskator</h2>
-    <p>Is your department run by bean counters, <abbr title="Pointy Haired Boss">PHBs</abbr>, or clueless management who equate lines of code with productivity? Use this tool to augment your code with additional lines of nothing to satisfy them!</p>
+    <p>Is your department run by bean counters, <abbr title="Pointy Haired Boss">PHBs</abbr>, or clueless management who equate lines of code with productivity? Use this tool to augment your code with additional lines of sweet nothings to satisfy them!</p>
 
     <div class="row">
         <textarea id="original" class="column">
