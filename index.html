@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<title>Obmuskator helps protect your job!</title>
+<!-- This whole thing is a joke and doesn't work.  Don't take it seriously. -->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+        }
+
+        textarea {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+
+        .column {
+            float: left;
+            width: 40%;
+            padding: 10px;
+            margin-right: 40px;
+            height: 600px;
+
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Obmuskator</h2>
+    <p>Is your department run by bean counters, <abbr title="Pointy Haired Boss">PHBs</abbr>, or clueless management who equate lines of code with productivity? Use this tool to enhance your code output to satisfy them!</p>
+
+    <div class="row">
+        <textarea id="original" class="column">
+/* Your code here */
+function whatIsTheDate(){
+    console.log(new Date());
+}
+
+function whatDoesTheFoxDo(){
+    console.log("The quick brown fox jumps over the lazy little dogs");
+}
+            </textarea>
+        <textarea id="output" class="column"></textarea>
+    </div>
+    <div>
+    <button onclick="random_bullshit_go()">Random bullshit go!</button>
+</div>
+
+    <script type="text/javascript">
+
+        let spacer = '    ';
+        let newline = '\r\n';
+
+        function randomString(){
+            var characters = "abcdefghiklmnopqrstuvwxyz";  
+              
+            var randomstring = '';  
+            
+            for (var i=0; i<7; i++) {  
+                var rnum = Math.floor(Math.random() * characters.length);  
+                randomstring += characters.substring(rnum, rnum+1);  
+            }
+            return randomstring;  
+        }
+        
+        function random_bullshit_go(){
+            fetch('https://baconipsum.com/api/?type=meat-and-filler')
+            .then((response) => response.json())
+            .then((data) => {
+                let original = document.getElementById('original').value;
+                original = findAndReplaceStrings(original);
+                
+                let codeSnippets = [];
+                codeSnippets.push(`${newline}${spacer}/* Code reviewers please ignore everything after this part. */`);
+                codeSnippets.push(`${newline}${newline}`);
+
+
+                data.forEach((element, index) => {
+
+                    codeSnippets.push(`${newline}${spacer}function ${randomString()}(){`);
+                    codeSnippets.push(`${newline}${spacer}${spacer}console.log(`);
+                    element.split(' ').forEach(word => codeSnippets.push(`${newline}${spacer}${spacer}${spacer}'${word}' +`) );
+                    codeSnippets.push(`${newline}${spacer}${spacer}${spacer}'');`);
+                    codeSnippets.push(`${newline}${spacer}}${newline}`);
+                });
+
+                let lastBrace = original.lastIndexOf('}');
+                document.getElementById('output').value = original.slice(0, lastBrace) + codeSnippets.join(`${spacer}`) + original.slice(lastBrace);
+            } );
+        }
+
+        function findAndReplaceStrings(originalCode){
+
+            const regex = /['"](.* +.*)+['"]/igm;
+            
+            if(!originalCode.match(regex)){
+                return originalCode;
+            }
+
+            const found = originalCode.match(regex).forEach( m => {
+                console.log(m);
+                originalCode = originalCode.replace(m, splitString(m));
+            });
+            // originalCode.match(regex).forEach( m => console.log(m));
+            console.log(originalCode);
+            return originalCode;
+        }
+        
+        function splitString(theString){
+            console.log(theString);
+            let parts = [];
+            let quoteChar = theString[0];
+            theString.slice(1,theString.length-1).split(' ').forEach(word => parts.push(`${quoteChar}${word}${quoteChar}+${newline}`));
+            parts.push(`''`);
+            return parts.join(`${newline}`);
+        }
+    </script>
+
+</body>
+
+</html>
